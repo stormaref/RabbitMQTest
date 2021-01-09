@@ -31,6 +31,10 @@ namespace ApiOne
             {
                 x.AddBus(provider => Bus.Factory.CreateUsingRabbitMq(config =>
                 {
+                    config.UseKillSwitch(options => options
+                        .SetActivationThreshold(10)
+                        .SetTripThreshold(0.1)
+                        .SetRestartTimeout(m: 1));
                     config.UseHealthCheck(provider);
                     config.Host(new Uri("rabbitmq://localhost"), h =>
                     {
